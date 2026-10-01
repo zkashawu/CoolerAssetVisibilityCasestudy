@@ -8,29 +8,29 @@ CoolerTrack is a mission-critical IoT asset tracking and visibility platform bui
 
 ---
 
-## 🏛️ System Architecture
+##  System Architecture
 
 CoolerTrack operates on an enterprise 3-tier, high-availability architecture with edge reverse-proxying, an event-driven Node.js ingestion pipeline, Redis Pub/Sub cluster coordination, and an MS SQL Server time-series datastore.
 
 ```mermaid
 flowchart TD
-    subgraph EdgeDevices["📡 IoT Field Hardware Tier"]
+    subgraph EdgeDevices[" IoT Field Hardware Tier"]
         T1["ESP32 / Traccar Tracker<br/>(GPS, Motion, HDOP, Batt)"]
         T2["Commercial Cooler Asset<br/>(Embedded Tracker)"]
         T3["Drone First Responder<br/>(Aerial Tracking Unit)"]
     end
 
-    subgraph Ingestion["🌐 Ingestion & Telemetry Transport"]
+    subgraph Ingestion[" Ingestion & Telemetry Transport"]
         MQTT["MQTT Broker (EMQX / Mosquitto)<br/>cavs/cooler/{id}/telemetry"]
         HTTP["Traccar HTTP Webhook Gateway<br/>POST /api/gps/update"]
     end
 
-    subgraph PresentationEdge["🛡️ Presentation Tier (VM1 —)"]
+    subgraph PresentationEdge["️ Presentation Tier (VM1 —)"]
         IIS["IIS 10 + ARR + URL Rewrite"]
         STATIC["React 19 Production Bundle<br/>(Static Host)"]
     end
 
-    subgraph AppTier["⚙️ Application & Real-Time Tier (VM2 — )"]
+    subgraph AppTier[" Application & Real-Time Tier (VM2 — )"]
         NODE["Node.js / Express API Cluster<br/>(PM2 Managed)"]
         FILTER["Telemetry Quality Filter<br/>(5-Gate Outlier & Jump Engine)"]
         VALIDATOR["Breach Validator<br/>(4-Strategy Corroboration)"]
@@ -39,14 +39,14 @@ flowchart TD
         DISPATCHER["Autonomous Drone Dispatcher<br/>(Proximity & Route Solver)"]
     end
 
-    subgraph DataTier["💾 Relational & Time-Series Data Tier (VM3 — )"]
+    subgraph DataTier[" Relational & Time-Series Data Tier (VM3 — )"]
         MSSQL[("Microsoft SQL Server 2022<br/>Database: CoolerVis")]
         SP["Stored Procedure:<br/>ProcessNewLocationPing"]
         DIM["DIM_Coolers<br/>(Geofences & Status)"]
         FACT["FACT_Telemetry & FACT_AuditLogs<br/>(Clustered Time-Series)"]
     end
 
-    subgraph Clients["🖥️ Operations & Alerts Tier"]
+    subgraph Clients[" Operations & Alerts Tier"]
         DASH["Operations Web Dashboard<br/>(React 19 + Leaflet Maps)"]
         ALERTS["Multi-Channel Alerts<br/>(Email, TTS Audio, Push)"]
         SECURITY["Security & Recovery Teams"]
@@ -80,7 +80,7 @@ flowchart TD
 
 ---
 
-## ⚙️ Key Engineering Decisions
+##  Key Engineering Decisions
 
 ### 1. GPS Smoothing & Telemetry Noise Filtering
 Field IoT GPS units suffer from multipath reflections, satellite geometry degradation (high HDOP), and urban canyon drift. CoolerTrack addresses this through a dual-stage filtering engine:
@@ -137,7 +137,7 @@ In distributed enterprise deployments behind reverse proxies (IIS with ARR), net
 
 ---
 
-## 🚁 Drone First-Response Extension (Prototype)
+##  Drone First-Response Extension (Prototype)
 
 An autonomous perimeter security extension for high-value cooler assets and high-risk commercial zones:
 
@@ -156,7 +156,7 @@ An autonomous perimeter security extension for high-value cooler assets and high
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 | Layer | Technologies |
 |---|---|
@@ -169,7 +169,7 @@ An autonomous perimeter security extension for high-value cooler assets and high
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Backend Setup
 ```bash
@@ -198,7 +198,7 @@ npm run build
 
 ---
 
-## 🔒 Security & Compliance
+##  Security & Compliance
 * **API Authentication:** JWT token verification on all user endpoints; per-device API key validation on IoT ingestion endpoints.
 * **SQL Injection Prevention:** All database queries executed through parameterized SQL statements and stored procedures.
 * **Audit Trails:** Every configuration adjustment, movement approval, and settle warning is logged with timestamps and operator identity to `FACT_AuditLogs`.
